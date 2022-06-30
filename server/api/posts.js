@@ -23,8 +23,7 @@ posts.put("/:postId", async (req, res) => {
       });
 
     await post.save();
-    res.send(post);
-      
+    res.send(post);  
 });
 
 posts.delete("/:postId", async (req, res) => {

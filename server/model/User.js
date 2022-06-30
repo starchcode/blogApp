@@ -2,7 +2,6 @@ const { Model, DataTypes } = require("sequelize");
 const sequelize = require("./database");
 const post = require("./Post");
 const comment = require("./Comment");
-const subcomment = require("./Subcomment");
 
 class User extends Model {}
 
@@ -21,11 +20,6 @@ User.hasMany(post, {
     onUpdate: "CASCADE"
 })
 User.hasMany(comment, {
-    foreignKey: "user_id",
-    onDelete: "CASCADE", 
-    onUpdate: "CASCADE"
-})
-User.hasMany(subcomment, {
     foreignKey: "user_id",
     onDelete: "CASCADE", 
     onUpdate: "CASCADE"
