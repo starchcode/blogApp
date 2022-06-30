@@ -27,19 +27,37 @@ describe("/POSTS", () => {
         .get("/posts")
         .end((err, res) => {
           res.should.have.status(200);
-          res.body.should.be.a("array");
+          res.body.posts.should.be.a("array");
           done();
         });
     });
-    it("If no query is passed send me the last 10 posts", () => {
+    it("If no query is passed receive last 10 posts, in descending fashion with total page numbers!", (done) => {
       chai
         .request(server)
         .get("/posts")
         .end((err, res) => {
-          expect(res.body).to.have.lengthOf(10);
+          expect(res.body.posts).to.have.lengthOf(10);
+        //   console.log(res.body)
+        //   console.log(res.body.totalPages)
+            expect(res.body.posts[0].id).to.be.above(res.body.posts[9].id);
+            res.body.totalPages.should.be.a("number");
           done();
         });
     });
+    it("passing page query with value of number 2 should give us posts from the requested page", (done) => {
+        
+        chai
+        .request(server)
+        .get("/posts?page=2")
+        .end((err, res) => {
+          console.log(res.body.totalPages)
+          console.log(res.body.posts)
+          expect(res.body.posts[0].id).to.be.above(40);
+          expect(res.body.posts[9].id).to.be.below(40);
+          done();
+        });
+    })
+        
   });
 
   xit("POST/ It is possible to post a blog post in post's model", (done) => {

@@ -1,1 +1,1 @@
-# Welcome to blogApp_Ayming
+# Welcome to blogApp
