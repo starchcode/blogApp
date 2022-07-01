@@ -12,6 +12,7 @@ const Post = require("../model/Post");
 
 chai.use(chaiHttp);
 
+//dev.sqlite is seeded with 50 posts(done separately to speed up the test)
 describe("/POSTS", () => {
   before("Setup db", (done) => {
     sequelize.sync().then(() => {
@@ -37,27 +38,35 @@ describe("/POSTS", () => {
         .get("/posts")
         .end((err, res) => {
           expect(res.body.posts).to.have.lengthOf(10);
-        //   console.log(res.body)
-        //   console.log(res.body.totalPages)
-            expect(res.body.posts[0].id).to.be.above(res.body.posts[9].id);
-            res.body.totalPages.should.be.a("number");
+          //   console.log(res.body)
+          //   console.log(res.body.totalPages)
+          expect(res.body.posts[0].id).to.be.above(res.body.posts[9].id);
+          res.body.totalPages.should.be.a("number");
           done();
         });
     });
+
     it("passing page query with value of number 2 should give us posts from the requested page", (done) => {
-        
-        chai
+      chai
         .request(server)
         .get("/posts?page=2")
         .end((err, res) => {
-          console.log(res.body.totalPages)
-          console.log(res.body.posts)
-          expect(res.body.posts[0].id).to.be.above(40);
-          expect(res.body.posts[9].id).to.be.below(40);
+          expect(res.body.posts[0].id).to.be.eq(40);
+          expect(res.body.posts[9].id).to.be.eq(31);
           done();
         });
-    })
-        
+    });
+
+    it("if page does not exist attach an error message'Page does not exist!'", (done) => {
+      chai
+        .request(server)
+        .get("/posts?page=6")
+        .end((err, res) => {
+          res.should.have.status(404);
+          expect(res.body.error).to.eql("Page does not exist!");
+          done();
+        });
+    });
   });
 
   xit("POST/ It is possible to post a blog post in post's model", (done) => {

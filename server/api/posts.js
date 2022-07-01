@@ -1,6 +1,5 @@
 const posts = require("express").Router();
 const Post = require("../model/Post");
-const User = require("../model/User");
 
 posts.get("/", async (req, res) => {
   //?page=2&limit=3
@@ -15,11 +14,20 @@ posts.get("/", async (req, res) => {
       order: [["id", "DESC"]],
       limit: 10,
     });
-  }else if(page > 0 && page <= totalPages){
+  } else if (page > 0 && page <= totalPages) {
     posts = await Post.findAll({
-        order: [["id", "DESC"]],
-        limit: 10,
-        offset: limit * (page - 1)
+      order: [["id", "DESC"]],
+      limit: 10,
+      offset: limit * (page - 1),
+    });
+  } else {
+    // in case page does not exist
+    return res
+      .status(404)
+      .send({
+        posts: [],
+        totalPages: totalPages,
+        error: "Page does not exist!",
       });
   }
   //TODO:  Next passing a page that does not exist!!
@@ -55,4 +63,3 @@ module.exports = posts;
 
 //TODO:
 // refactor using DRY
-// start testing and continue with TDD

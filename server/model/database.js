@@ -1,7 +1,7 @@
 const { Sequelize } = require("sequelize");
 let sequelize;
 
-if ((process.env.NODE_ENV === "test")) {
+if ((process.env.NODE_ENV === "test")) { // if testing use dev.sqlite
   console.log("Running the db on memory!");
   sequelize = new Sequelize({
     dialect: "sqlite",
@@ -12,8 +12,8 @@ if ((process.env.NODE_ENV === "test")) {
 
   sequelize = new Sequelize({
     dialect: "sqlite",
-    storage: "./model/database.sqlite",
-    // storage: "./model/dev.sqlite",
+    // storage: "./model/database.sqlite",
+    storage: "./model/dev.sqlite",
   });
 }
 
