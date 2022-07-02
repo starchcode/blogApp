@@ -49,6 +49,14 @@ textarea {
   text-align: center;
   background-color: #dedede;
 }
+
+.postBox.shortDesc {
+  min-height: 100px;
+}
+
+.postBox.shortDesc h1{
+  font-size: 1.4rem;
+}
 .dataContainer.inDetail{
   row-gap: 10px;
 }

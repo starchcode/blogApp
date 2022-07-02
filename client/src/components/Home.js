@@ -9,15 +9,14 @@ export default function Home({ posts }) {
         navigate("/posts/" + post.id);
       };
       return (
-        <div onClick={() => navigationHandler()} className="postBox">
+        <div onClick={() => navigationHandler()} className="postBox shortDesc">
           <h1>{post.title}</h1>
-          <p>{post.body}</p>
+          <p>{post.body.slice(0, 120) + ". . ."}</p>
         </div>
       );
     });
   }
 
-  return (
-    <div className="dataContainer">{postsRender()}</div>
-  )
+  if (!posts.length) return <div>No posts!</div>;
+  return <div className="dataContainer">{postsRender()}</div>;
 }
