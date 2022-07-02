@@ -13,7 +13,7 @@ sequelize.sync().then(() => {
 
   //1st arg: comments to become subcomments
   //2nd arg: parent comment ID
-  subCommentSeeder([41, 42, 43, 44, 45], 2);
+  // subCommentSeeder([41, 42, 43, 44, 45], 2);
 });
 
 async function postSeeder(upperLimit, startingNum = 0) {

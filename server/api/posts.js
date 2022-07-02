@@ -2,13 +2,11 @@ const posts = require("express").Router();
 const Post = require("../model/Post");
 
 posts.get("/", async (req, res) => {
-  //?page=2&limit=3
-  console.log(req.query.page);
   const limit = 10;
   const page = req.query.page;
   let totalPages = Math.ceil((await Post.count()) / limit); // round up
-
   let posts;
+  
   if (page === undefined) {
     posts = await Post.findAll({
       order: [["id", "DESC"]],
@@ -30,10 +28,11 @@ posts.get("/", async (req, res) => {
         error: "Page does not exist!",
       });
   }
-  //TODO:  Next passing a page that does not exist!!
 
   res.status(200).json({ posts: posts, totalPages: totalPages });
 });
+
+
 
 posts.post("/", async (req, res) => {
   // body must contain: { title, body, user_id }

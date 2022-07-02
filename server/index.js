@@ -18,6 +18,14 @@ app.use(express.json());
 const apiRouter = require('./api/api');
 app.use('/', apiRouter);
 
+
+// Error handler route:
+app.use((err, req, res, next) => {
+    const status = err.status || 500;
+    err.statusText = err.statusText + ' ' + err.message
+    res.status(status).json({error: err.message});
+  });
+
 app.listen(PORT);
 
 module.exports = app;
