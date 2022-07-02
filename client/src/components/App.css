@@ -1,0 +1,59 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@100;200;300;400;600;700&display=swap");
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "IBM Plex Serif";
+  font-size: 18px;
+  color: #262626;
+}
+
+body {
+  background-color: #c2c2c2;
+}
+h1 {
+  font-size: 2rem;
+  padding: 10px;
+  background-color: #a4a4a4;
+}
+h2 {
+  font-size: 1rem;
+}
+
+p {
+  padding: 10px;
+}
+
+textarea {
+  flex-grow: 1;
+  padding: 10px;
+  margin: 10px;
+  resize: none;
+}
+.dataContainer {
+  display: flex;
+  row-gap: 30px;
+  flex-flow: column;
+  min-height: 100vh;
+  align-items: center; 
+}
+
+.postBox {
+  display: flex;
+  width: 600px;
+  min-height: 600px;
+  flex-flow: column;
+  overflow: hidden;
+  border-radius: 8px;
+  text-align: center;
+  background-color: #dedede;
+}
+.dataContainer.inDetail{
+  row-gap: 10px;
+}
+.dataContainer button {
+  width: 120px;
+  align-self: center;
+  justify-self: end;
+}
