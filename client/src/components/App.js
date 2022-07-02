@@ -7,37 +7,41 @@ import server from "../utils/server";
 import Home from "./Home";
 import Navbar from "./Navbar";
 
-const apiPosts = {
-  posts: [
-    { id: 1, title: "title1", body: "body1" },
-    { id: 2, title: "title2", body: "body2" },
-  ],
-  totalPages: 10,
-};
-
 export default function App() {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState(null);
   const [postTotalPages, setPostTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const fetchPosts = async (pageNum) => {
+    const getPosts = await server.get("/posts?page=" + pageNum);
+    console.log(getPosts)
+    setPosts(getPosts.data.posts);
+    setPostTotalPages(getPosts.data.totalPages);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const getPosts = await server.get("/posts");
-      setPosts(getPosts.data.posts);
-      setPostTotalPages(getPosts.data.totalPages);
-      console.log('called for posts')
-    }
-
-    fetchData()
-      .catch(console.error)
-
-  }, []);
-
+    fetchPosts(currentPage).catch(e => {
+      // if(e.response.status === 404 && e.response.message){
+        console.log(e)
+      // }
+    });
+  }, [currentPage]);
 
   return (
     <BrowserRouter>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Home posts={posts} />} />
+        <Route
+          path="/"
+          element={
+            <Home
+              posts={posts}
+              postTotalPages={postTotalPages}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
+          }
+        />
         <Route path="/posts/:postId" element={<PageDetails posts={posts} />} />
       </Routes>
     </BrowserRouter>

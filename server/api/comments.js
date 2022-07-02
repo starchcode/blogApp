@@ -12,7 +12,7 @@ comments.get("/:postId", async (req, res) => {
       where: { post_id: postId, parent_comment_id: null },
     })) / limit
   );
-
+console.log(totalPages);
   // page queries
   if (page === undefined) {
     comments = await Comment.findAll({
@@ -31,7 +31,7 @@ comments.get("/:postId", async (req, res) => {
     });
   } else {
     // in case page does not exist
-    return res.status(404).json({
+    return res.status(404).send({
       comments: [],
       totalPages: totalPages,
       error: `Page ${page} does not exist!`,

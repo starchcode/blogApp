@@ -65,3 +65,30 @@ textarea {
   align-self: center;
   justify-self: end;
 }
+
+.commentContainer {
+  min-height: auto;
+}
+
+.commentBox {
+  display: flex;
+  width: 600px;
+  padding: 10px;
+  flex-flow: column;
+  overflow: hidden;
+  border-radius: 8px;
+  text-align: left;
+  background-color: #e8f8ffa1;
+}
+
+.subComment {
+  padding: 10px 20px;
+  margin: 10px;
+  background-color: #919ea341;
+
+}
+
+.postNav {
+  display: flex;
+  opacity: 0.9;
+}
