@@ -5,12 +5,21 @@ let chaiHttp = require("chai-http");
 let should = chai.should();
 let server = require("../index");
 
+const sequelize = require("../model/database");
+const Comment = require("../model/Comment");
+
 chai.use(chaiHttp);
 
 // dev.sqlite is seeded with 50 comments with post_id "1"
 // and some subcomments(done separately with seed.js speed up the test)
 describe("/comments/:postId", () => {
-  describe("GET", () => {
+  before((done) => {
+    sequelize.sync().then(() => {
+      done();
+    });
+  });
+
+  describe("GET/", () => {
     it("If postId does not have any comments show an empty array with totalPages property of '0'. ", (done) => {
       chai
         .request(server)
@@ -67,13 +76,13 @@ describe("/comments/:postId", () => {
     });
 
     it("50th comment to have 5 subComments", (done) => {
-        chai
+      chai
         .request(server)
         .get("/comments/1?page=4") //ensure last comment has 5 sub comments in dev.sqlite!
         .end((err, res) => {
           expect(res.body.comments[9].subComments).to.have.lengthOf(5);
           done();
-        });  
+        });
     });
 
     it("if page does not exist receive an error message: 'Page 'notExistingPageNumber' does not exist!'", (done) => {
@@ -89,19 +98,145 @@ describe("/comments/:postId", () => {
     });
   });
 
-  xit("POST/ It is possible to post a blog post in post's model", (done) => {
-    chai
-      .request(server)
-      .post("/posts")
-      .send({
-        title: "title1",
-        body: "body1",
-      })
-      .end((err, res) => {
-        res.should.have.status(200);
-        res.body.should.have.property("title").eq("title1");
-        res.body.should.have.property("body").eq("body1");
+  describe("POST/", () => {
+    let result;
+
+    afterEach((done) => {
+      if (result.body.comment) {
+        Comment.destroy({ where: { id: result.body.comment.id } }).then(() =>
+          done()
+        );
+      } else {
+        done();
+      }
+    });
+
+    it("It is possible to post a comment to a blog post", (done) => {
+      try {
+        chai
+          .request(server)
+          .post("/comments")
+          .send({
+            body: "body_test",
+          })
+          .end((err, res) => {
+            result = res;
+            console.log("===> ", result.body.comment);
+            result.should.have.status(201);
+            result.body.comment.should.have.property("body").eq("body_test");
+            done();
+          });
+      } catch (e) {
+        done(e);
+      }
+    });
+
+    it("BODY property must be attached to request", (done) => {
+      try {
+        chai
+          .request(server)
+          .post("/comments")
+          .send({})
+          .end((err, res) => {
+            result = res;
+            result.should.have.status(422);
+            done();
+          });
+      } catch (e) {
+        done(e);
+      }
+    });
+  });
+
+
+  describe("PUT:", () => {
+    let body;
+
+    before((done) => {
+      Comment.findOne({ raw: true, where: { id: 1 } }).then((data) => {
+        body = data;
         done();
       });
+    });
+
+    afterEach((done) => {
+      Comment.findOne({ where: { id: 1 } }).then((data) => {
+        data.set({
+          body: body.body,
+        });
+        data.save().then(() => done());
+      });
+    });
+
+    it("Should be able to update a comment with ID of 1 and receive 204", (done) => {
+      chai
+        .request(server)
+        .put("/comments/1")
+        .send({
+          body: "body_UPDATED",
+        })
+        .end((err, res) => {
+          res.should.have.status(204);
+          Comment.findOne({ where: { id: 1 } }).then((data) => {
+            // console.log("===> ", data.title);
+            try {
+              expect(data.body).to.equal("body_UPDATED");
+              done();
+            } catch (e) {
+              done(e);
+            }
+          });
+        });
+    });
+
+    it("Requested post must exist", (done) => {
+      chai
+        .request(server)
+        .put("/comments/999")
+        .send({
+          title: "title_UPDATED",
+          body: "body_UPDATED",
+        })
+        .end((err, res) => {
+          res.should.have.status(404);
+          done();
+        });
+    });
   });
+
+
+
+  describe("DELETE/:postId", () => {
+    //204
+    let toDeleteId;
+    before((done) => {
+      Comment.create({ body: "toDELETE" })
+      .then((newPost) => {
+        toDeleteId = newPost.id;
+        done();
+      });
+    });
+
+    it("A post can be deleted and receive 204 status code", (done) => {
+      chai
+        .request(server)
+        .delete("/comments/" + toDeleteId)
+        .end((err, res) => {
+          res.should.have.status(204);
+          done();
+        });
+    });
+
+    it("If entry does not exist receive 404", (done) => {
+      chai
+      .request(server)
+      .delete("/comments/999")
+      .end((err, res) => {
+        res.should.have.status(404);
+        done();
+      });
+    })
+    
+  });
+  
 });

@@ -6,7 +6,7 @@ posts.param('postId', async (req, res, next, postId) => {
   const post = await Post.findOne({ where: { id: postId}});
   req.body.post = post;
   next();
-})
+});
 
 posts.get("/", async (req, res) => {
   const limit = 10;
@@ -53,22 +53,25 @@ posts.post("/", async (req, res) => {
 
 posts.put("/:postId", async (req, res) => {
   // body must contain: { title, body, user_id }
-  const postId = req.params.postId;
-  const post = await Post.findOne({ where: { id: postId } });
+  if(!req.body.post) return res.sendStatus(404);
+  if(!req.body.title || !req.body.body) return res.statusCode(501)
+  // const postId = req.params.postId;
+  // const post = await Post.findOne({ where: { id: postId } });
 
   Object.keys(req.body).forEach((key) => {
-    post[key] = req.body[key];
+    req.body.post[key] = req.body[key];
   });
 
-  await post.save();
+  await req.body.post.save();
   res.sendStatus(204);
 });
 
 posts.delete("/:postId", async (req, res) => {
-  const postId = req.params.postId;
-  await Post.destroy({ where: { id: postId } });
-  res.send("removed");
+  if(!req.body.post) return res.sendStatus(404);
+  await Post.destroy({ where: { id: req.body.post.id } });
+  res.sendStatus(204);
 });
+
 module.exports = posts;
 
 //TODO:

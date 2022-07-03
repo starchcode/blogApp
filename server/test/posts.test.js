@@ -1,12 +1,12 @@
-//Require the dev-dependencies
 let chai = require("chai");
 let expect = chai.expect;
 let chaiHttp = require("chai-http");
 let server = require("../index");
 let should = chai.should();
-const Post = require("../model/Post");
 
 const sequelize = require("../model/database");
+const { request } = require("chai");
+const Post = require("../model/Post");
 
 chai.use(chaiHttp);
 
@@ -78,7 +78,7 @@ describe("/posts", () => {
     });
   });
 
-  describe("POST:", () => {
+  describe("POST:postId", () => {
     let result;
 
     afterEach((done) => {
@@ -147,43 +147,98 @@ describe("/posts", () => {
     });
   });
 
-  describe("PUT/postId", () => {
-    let result;
+  describe("PUT/:postId", () => {
     let body;
 
     before((done) => {
       Post.findOne({ raw: true, where: { id: 1 } }).then((data) => {
         body = data;
-        done()
+        done();
       });
-
     });
     afterEach((done) => {
-      Post.findOne({ where: { id: 1 }}).then((data) => {
+      Post.findOne({ where: { id: 1 } }).then((data) => {
         data.set({
           title: body.title,
-          body: body.body
-        })
-        data.save().then(() => done())
-      })
+          body: body.body,
+        });
+        data.save().then(() => done());
+      });
     });
 
-    it("Updating an entity with ID of 1 should give status code 204", (done) => {
-      try {
-        chai
-          .request(server)
-          .put("/posts/1")
-          .send({
-            title: "title_UPDATED",
-            body: "body_UPDATED",
-          })
-          .end((err, res) => {
-            res.should.have.status(204);
-            done();
+    it("Should be able to update a post with ID of 1 and receive 204", (done) => {
+      chai
+        .request(server)
+        .put("/posts/1")
+        .send({
+          title: "title_UPDATED",
+          body: "body_UPDATED",
+        })
+        .end((err, res) => {
+          res.should.have.status(204);
+          Post.findOne({ where: { id: 1 } }).then((data) => {
+            console.log("===> ", data.title);
+            try {
+              expect(data.title).to.equal("title_UPDATED");
+              expect(data.body).to.equal("body_UPDATED");
+              done();
+            } catch (e) {
+              done(e);
+            }
           });
-      } catch (e) {
-        done(e);
-      }
+        });
     });
+
+    it("Requested post must exist", (done) => {
+      chai
+        .request(server)
+        .put("/posts/999")
+        .send({
+          title: "title_UPDATED",
+          body: "body_UPDATED",
+        })
+        .end((err, res) => {
+          res.should.have.status(404);
+          done();
+        });
+    });
+  });
+
+  describe("DELETE/:postId", () => {
+    //204
+    let toDeleteId;
+    before((done) => {
+      Post.create({ title: "toDELETE", body: "toDELETE" }).then((newPost) => {
+        toDeleteId = newPost.id;
+        done();
+      });
+    });
+
+    // after((done) => {
+    //   if (toDeleteId) {
+    //     Post.destroy({ where: { id: toDeleteId } });
+    //   }
+    // });
+
+    it("A post can be deleted and receive 204 status code", (done) => {
+      chai
+        .request(server)
+        .delete("/posts/" + toDeleteId)
+        .end((err, res) => {
+          res.should.have.status(204);
+          done();
+        });
+    });
+
+    it("If entry does not exist receive 404", (done) => {
+      chai
+      .request(server)
+      .delete("/posts/999")
+      .end((err, res) => {
+        res.should.have.status(404);
+        done();
+      });
+    })
+    
   });
 });
