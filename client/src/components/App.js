@@ -15,7 +15,6 @@ export default function App() {
 
   const fetchPosts = async (pageNum) => {
     const getPosts = await server.get("/posts?page=" + pageNum);
-    console.log(getPosts);
     setPosts(getPosts.data.posts);
     setPostTotalPages(getPosts.data.totalPages);
   };
@@ -28,7 +27,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <Navbar />
+      <Navbar fetchPosts={fetchPosts} currentPage={currentPage}/>
       <Routes>
         <Route
           path="/"

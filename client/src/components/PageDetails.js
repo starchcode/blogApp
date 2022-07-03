@@ -20,6 +20,7 @@ export default function PostDetails({ posts, setPosts }) {
   };
 
   const updatePost = async () => {
+    if (!title || !body) return null;
     const updatePost = await server.put("/posts/" + post.id, {
       title: title,
       body: body,
@@ -48,15 +49,14 @@ export default function PostDetails({ posts, setPosts }) {
   const handleSave = async () => {
     // 1 make an api call
     const res = await updatePost();
-    console.log(res.status);
-    if (res.status === 204) {
-      setEditing(false);
+    if (res && res.status === 204) {
+      return setEditing(false);
     }
   };
   const handleDelete = async () => {
     const deletePost = await server.delete("/posts/" + params.postId);
     if (deletePost.status === 204) {
-      setPosts(posts.filter(post => post.id != params.postId))
+      setPosts(posts.filter((post) => post.id != params.postId));
       navigate("/");
     }
   };
@@ -90,7 +90,15 @@ export default function PostDetails({ posts, setPosts }) {
       return (
         <Fragment>
           <button onClick={() => handleSave()}>Save</button>
-          <button onClick={() => setEditing(false)}>Cancel</button>
+          <button
+            onClick={() => {
+              setBody(post.body);
+              setTitle(post.title);
+              setEditing(false);
+            }}
+          >
+            Cancel
+          </button>
           <button onClick={() => handleDelete()}>Delete</button>
         </Fragment>
       );
