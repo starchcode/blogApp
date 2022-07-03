@@ -1,7 +1,7 @@
 import { Fragment, useState } from "react";
 
 
-export default function SubComments({ subComments }) {
+export default function SubComments({ subComments = [] }) {
   const [viewSubComments, setViewSubComments] = useState(false);
 
   const allSubComments = subComments.map((subComment) => {

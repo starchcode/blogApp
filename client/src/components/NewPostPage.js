@@ -13,8 +13,6 @@ const postBlog = async () => {
     const response = await server.post("/posts", {
         title: title, body: body
     })
-    console.log(response.status);
-    console.log(response.data.post.id)
     if(response.status === 201){
         navigate("/posts/" + response.data.post.id);
     }
