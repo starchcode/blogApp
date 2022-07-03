@@ -5,7 +5,7 @@ if ((process.env.NODE_ENV === "test")) { // if testing use dev.sqlite
   console.log("Running the db on memory!");
   sequelize = new Sequelize({
     dialect: "sqlite",
-    host: "./model/dev.sqlite",
+    host: "./test/dev.sqlite",
   });
 } else {
   console.log("we are on deployment");

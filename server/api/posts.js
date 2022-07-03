@@ -46,9 +46,9 @@ res.send(req.body.post);
 
 
 posts.post("/", async (req, res) => {
-  // body must contain: { title, body, user_id }
+  if(!req.body.title || !req.body.body) return res.sendStatus(422); 
   const post = await Post.create(req.body);
-  res.send(post);
+  res.status(201).json({post: post});
 });
 
 posts.put("/:postId", async (req, res) => {
@@ -61,7 +61,7 @@ posts.put("/:postId", async (req, res) => {
   });
 
   await post.save();
-  res.send(post);
+  res.sendStatus(204);
 });
 
 posts.delete("/:postId", async (req, res) => {

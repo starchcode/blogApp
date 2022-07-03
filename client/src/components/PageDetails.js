@@ -6,8 +6,9 @@ import CommentBox from "./CommentBox";
 
 export default function PostDetails({ posts }) {
   const [editing, setEditing] = useState(false);
-  const [body, setBody] = useState("");
   const [post, setPost] = useState(null);
+  const [body, setBody] = useState("");
+  const [title, setTitle] = useState("");
 
   let params = useParams();
 
@@ -30,7 +31,7 @@ export default function PostDetails({ posts }) {
 
   const editHandle = () => {
     setEditing(true);
-    // setBody(body || thisPagePost.body);
+    setBody(post.body);
   };
 
   const handleSave = () => {
