@@ -15,16 +15,14 @@ export default function App() {
 
   const fetchPosts = async (pageNum) => {
     const getPosts = await server.get("/posts?page=" + pageNum);
-    console.log(getPosts)
+    console.log(getPosts);
     setPosts(getPosts.data.posts);
     setPostTotalPages(getPosts.data.totalPages);
   };
 
   useEffect(() => {
-    fetchPosts(currentPage).catch(e => {
-      // if(e.response.status === 404 && e.response.message){
-        console.log(e)
-      // }
+    fetchPosts(currentPage).catch((e) => {
+      console.log(e);
     });
   }, [currentPage]);
 
@@ -43,7 +41,10 @@ export default function App() {
             />
           }
         />
-        <Route path="/posts/:postId" element={<PageDetails posts={posts} />} />
+        <Route
+          path="/posts/:postId"
+          element={<PageDetails posts={posts} setPosts={setPosts} />}
+        />
         <Route path="/newpostpage" element={<NewPostPage />} />
       </Routes>
     </BrowserRouter>
