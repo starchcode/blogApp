@@ -1,12 +1,12 @@
 import { useState, useEffect, Fragment} from "react";
 import { useParams } from "react-router-dom";
 import server from "../utils/server";
+import SubComments from "./SubComments";
 
 export default function CommentBox () {
   const [comments, setComments] = useState(null);
   const [commentsTotalPages, setCommentsTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [viewSubComments, setViewSubComments] = useState(false);
   let params = useParams();
 
 
@@ -32,22 +32,23 @@ export default function CommentBox () {
     if (commentsTotalPages=== 0) return "There is no comments for this post!";
 
     return comments.map((comment) => {
-      const subCommentsRender = comment.subComments.map((subComment) => {
-        return subComment.id ? (
-          <div key={subComment.id + "subCm"} className="subComment">
-            {subComment.body}
-          </div>
-        ) : null;
-      });
+      // const subCommentsRender = comment.subComments.map((subComment) => {
+      //   return subComment.id ? (
+      //     <div key={subComment.id + "subCm"} className="subComment">
+      //       {subComment.body}
+      //     </div>
+      //   ) : null;
+      // });
 
-      
+
 
       return (
         <div key={comment.id + "cm"} className="commentContainer">
           <div className="commentBox">
             {comment.body}
-            {subCommentsRender.length ? <div>view more</div> : null}
+            {/* {subCommentsRender.length ? <div>view more</div> : null} */}
             {/* {subCommentsRender} */}
+            <SubComments subComments={comment.subComments}/>
           </div>
         </div>
       );

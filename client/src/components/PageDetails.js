@@ -13,22 +13,16 @@ export default function PostDetails({ posts }) {
 
   const fetchPost = async () => {
     const getOnePost = await server.get("/posts/" + params.postId);
-    console.log(getOnePost);
     setPost(getOnePost.data);
   };
 
   useEffect(() => {
-    console.log("PageDetails mounted");
     if (posts === null) {
-      console.log("no posts yet");
     } else {
-      console.log("posts FETCHED");
       const postFromProp = posts.find((post) => post.id == params.postId);
       if (postFromProp) {
-        console.log("postFromProp: ", postFromProp)
         setPost(postFromProp);
       } else {
-        console.log("Let's get the post since does not exist in PARENT");
         fetchPost();
       }
     }
