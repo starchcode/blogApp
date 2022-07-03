@@ -1,10 +1,26 @@
 import { useState, useEffect } from "react";
+import server from "../utils/server";
+import { useNavigate } from "react-router-dom";
+
 
 export default function NewPostPage() {
   const [title, setTitle] = useState(null);
   const [body, setBody] = useState(null);
   const [error, setError] = useState(null);
+const navigate = useNavigate();
 
+const postBlog = async () => {
+    const response = await server.post("/posts", {
+        title: title, body: body
+    })
+    console.log(response.status);
+    console.log(response.data.post.id)
+    if(response.status === 201){
+        navigate("/posts/" + response.data.post.id);
+    }
+    return response;
+}
+  
   const changeHandler = (e) => {
     let targetState = e.target.id;
     let value = e.target.value;
@@ -21,8 +37,7 @@ export default function NewPostPage() {
     }else{
         setError(null);
     }
-    console.log(error)
-    console.log("Submited", title, body);
+    postBlog();
   };
 
   return (
