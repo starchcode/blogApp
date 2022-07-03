@@ -7,11 +7,10 @@ let should = chai.should();
 
 chai.use(chaiHttp);
 
-// dev.sqlite is seeded with 50 comments with post_id "1" 
+// dev.sqlite is seeded with 50 comments with post_id "1"
 // and some subcomments(done separately with seed.js speed up the test)
-xdescribe("/posts", () => {
-
-  describe("GET", () => {
+describe("/posts", () => {
+  describe("GET/all posts", () => {
     it("If no page query is passed,  receive last 10 posts, in descending fashion with total pages!", (done) => {
       chai
         .request(server)
@@ -47,7 +46,28 @@ xdescribe("/posts", () => {
           done();
         });
     });
+  });
 
+  describe("GET/ one post", () => {
+    it("should recieve the post with passed /:postId", (done) => {
+      chai
+        .request(server)
+        .get("/posts/1")
+        .end((err, res) => {
+          expect(res.body.id).to.be.eq(1);
+          done();
+        });
+    });
+
+    it("should recieve undefined if /:postId does not exist", (done) => {
+      chai
+        .request(server)
+        .get("/posts/900")
+        .end((err, res) => {
+          expect(res.body.id).to.be.undefined;
+          done();
+        });
+    });
   });
 
   xit("POST/ It is possible to post a blog post in post's model", (done) => {

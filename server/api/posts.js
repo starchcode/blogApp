@@ -1,6 +1,13 @@
 const posts = require("express").Router();
 const Post = require("../model/Post");
 
+posts.param('postId', async (req, res, next, postId) => {
+  console.log('postId requested is', postId);
+  const post = await Post.findOne({ where: { id: postId}});
+  req.body.post = post;
+  next();
+})
+
 posts.get("/", async (req, res) => {
   const limit = 10;
   const page = req.query.page;
@@ -32,6 +39,10 @@ posts.get("/", async (req, res) => {
   res.status(200).json({ posts: posts, totalPages: totalPages });
 });
 
+
+posts.get("/:postId", async (req, res, next) => {
+res.send(req.body.post);
+})
 
 
 posts.post("/", async (req, res) => {
