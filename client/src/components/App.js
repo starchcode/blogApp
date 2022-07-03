@@ -6,6 +6,7 @@ import server from "../utils/server";
 
 import Home from "./Home";
 import Navbar from "./Navbar";
+import NewPostPage from "./NewPostPage";
 
 export default function App() {
   const [posts, setPosts] = useState(null);
@@ -43,6 +44,7 @@ export default function App() {
           }
         />
         <Route path="/posts/:postId" element={<PageDetails posts={posts} />} />
+        <Route path="/newpostpage" element={<NewPostPage />} />
       </Routes>
     </BrowserRouter>
   );
