@@ -29,7 +29,9 @@ console.log(totalPages);
       limit: 10,
       offset: limit * (page - 1),
     });
-  } else {
+  } else if(totalPages === 0){
+    comments = [];
+  }else {
     // in case page does not exist
     return res.status(404).send({
       comments: [],
