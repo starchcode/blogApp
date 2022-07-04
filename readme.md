@@ -6,7 +6,7 @@ Did not have enough time. Although implemented almost the entire project.
 
 ## Missing Features
 
-- [ ] sub comments can not be edited or deleted.
+- [x] sub comments can not be edited or deleted.
 
 - [ ] Front-end testing is not implemented. Despite not being familiar with front-end testing I could manage to do it if I was given a few more hours.
 
