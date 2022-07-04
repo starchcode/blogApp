@@ -9,11 +9,18 @@ export default function Comment({ comment, children, isSub }) {
   const [body, setBody] = useState(comment.body);
   const [deleted, setDeleted] = useState(false);
   const [subComments, setSubComments] = useState(children || []);
+  const [viewReplies, setViewReplies] = useState(false);
 
-useEffect(()=>{
-  // console.log("typeof children: ", Array.isArray(children))
-}, [])
 
+  const handleView = () => {
+    if(subComments.length){
+      <button onClick={()=> setViewReplies(true)}>view replies</button>
+    }
+
+  }
+  useEffect(() => {
+    if(subComments.length) console.log(subComments)
+  })
 
   const editHandler = () => {
     setEditing(true);
@@ -59,7 +66,7 @@ useEffect(()=>{
             subComments={subComments}
           />
         ) : null}
-        {subComments}
+        {subComments.length && !viewReplies ? <button onClick={()=> setViewReplies(true)}>view replies</button> : subComments}
       </div>
     </div>
   );

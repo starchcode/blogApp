@@ -1,21 +1,13 @@
 import { useState, useEffect, Fragment } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import server from "../utils/server";
 import CommentPostBox from "./CommentPostBox";
 import ViewMoreBtn from "./ViewMoreBtn";
 import Comment from "./Comment";
 export default function CommentBox() {
   const [comments, setComments] = useState(null);
-  const [commentsTotalPages, setCommentsTotalPages] = useState(0);
+  const [commentsTotalPages, setCommentsTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
-
-
-
-
-  useEffect(() => {
-    // console.log("CommentBox rendered")
-  })
-  
   const params = useParams();
 
   const fetchComments = async (pageNum) => {
@@ -26,10 +18,10 @@ export default function CommentBox() {
     if (Array.isArray(comments)) {
       return setComments(comments.concat(getComments.data.comments));
     }
-    if (!commentsTotalPages) setCommentsTotalPages(1);
+    // if (!commentsTotalPages) setCommentsTotalPages(1);
     setComments(getComments.data.comments);
-  };
 
+  };
 
   useEffect(() => {
     fetchComments(currentPage).catch((e) => {
@@ -37,10 +29,8 @@ export default function CommentBox() {
   }, [currentPage]);
 
 
-
   const commentBoxRender = () => {
     if (comments === null) return "Loading...";
-    if (commentsTotalPages === 0) return "There is no comments for this post!";
    
     return comments.map((comment) => {
       let allSubComments
@@ -57,7 +47,7 @@ export default function CommentBox() {
       );
     });
   };
-
+console.log(commentsTotalPages);
   return (
     <Fragment>
       {commentBoxRender()}

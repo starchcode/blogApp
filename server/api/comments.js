@@ -84,6 +84,7 @@ comments.put("/:postId", async (req, res) => {
 comments.delete("/:postId", async (req, res) => {
   if(!req.body.comment) return res.sendStatus(404);
   await Comment.destroy({ where: { id: req.body.comment.id } });
+  await Comment.destroy({ where: { parent_comment_id: req.body.comment.id } });
   res.sendStatus(204);
 });
 

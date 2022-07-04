@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import server from "../utils/server";
 
@@ -13,9 +13,6 @@ export default function ReplyCommentBox({
   const [body, setBody] = useState("");
   const params = useParams();
 
-  useEffect(() => {
-    // console.log('rendered')
-  });
 
   const postComment = async () => {
     const response = await server.post("/comments", {
