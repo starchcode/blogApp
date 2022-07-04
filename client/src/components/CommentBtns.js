@@ -1,6 +1,6 @@
 import server from "../utils/server";
-
-export default function CommentBtns ({editHandler, comment, setDeleted, setReplying}) {
+import { useEffect } from "react";
+export default function CommentBtns ({editHandler, comment, setDeleted, setReplying, isSub}) {
 
     const deleteComment = async () => {
         console.log("clicked")
@@ -15,7 +15,7 @@ export default function CommentBtns ({editHandler, comment, setDeleted, setReply
       
         return (
           <div className="cm-btns">
-            <button onClick={() => setReplying(true)}>Reply</button>
+            {!isSub? <button onClick={() => setReplying(true)}>Reply</button>: null}
             <button onClick={()=> editHandler()}>Edit</button>
             <button onClick={()=> deleteComment()}>Delete</button>
           </div>

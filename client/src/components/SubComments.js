@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 
 export default function SubComments({ subComments = [] }) {
   const [viewSubComments, setViewSubComments] = useState(false);

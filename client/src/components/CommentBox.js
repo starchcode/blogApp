@@ -8,6 +8,14 @@ export default function CommentBox() {
   const [comments, setComments] = useState(null);
   const [commentsTotalPages, setCommentsTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+
+
+
+
+  useEffect(() => {
+    // console.log("CommentBox rendered")
+  })
+  
   const params = useParams();
 
   const fetchComments = async (pageNum) => {
@@ -29,15 +37,24 @@ export default function CommentBox() {
   }, [currentPage]);
 
 
-useEffect(() => {
-}, [comments])
-
 
   const commentBoxRender = () => {
     if (comments === null) return "Loading...";
     if (commentsTotalPages === 0) return "There is no comments for this post!";
+   
     return comments.map((comment) => {
-      return <Comment key={comment.id + "cm"} comment={comment} />;
+      let allSubComments
+      if(comment.subComments){
+      allSubComments = comment.subComments.map((subComment) => {
+      if(!subComment) return null;
+        return  <Comment key={subComment.id + "subcm"} comment={subComment} isSub={true} />
+      });
+    }
+      return (
+      <Comment key={comment.id + "cm"} comment={comment} >
+        {allSubComments}
+      </Comment>
+      );
     });
   };
 
