@@ -18,6 +18,7 @@ export default function CommentBox() {
     if (Array.isArray(comments)) {
       return setComments(comments.concat(getComments.data.comments));
     }
+    if (!commentsTotalPages) setCommentsTotalPages(1);
     setComments(getComments.data.comments);
   };
 
