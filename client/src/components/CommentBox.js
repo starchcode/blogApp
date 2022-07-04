@@ -2,9 +2,8 @@ import { useState, useEffect, Fragment } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import server from "../utils/server";
 import CommentPostBox from "./CommentPostBox";
-import SubComments from "./SubComments";
 import ViewMoreBtn from "./ViewMoreBtn";
-
+import Comment from "./Comment";
 export default function CommentBox() {
   const [comments, setComments] = useState(null);
   const [commentsTotalPages, setCommentsTotalPages] = useState(0);
@@ -22,6 +21,7 @@ export default function CommentBox() {
     setComments(getComments.data.comments);
   };
 
+
   useEffect(() => {
     fetchComments(currentPage).catch((e) => {
       console.log(e);
@@ -32,32 +32,29 @@ export default function CommentBox() {
 
   const commentBoxRender = () => {
     if (comments === null) return "Loading...";
-    if (commentsTotalPages === 0 ) return "There is no comments for this post!";
+    if (commentsTotalPages === 0) return "There is no comments for this post!";
 
     return comments.map((comment) => {
-      return (
-        <div key={comment.id + "cm"} className="commentContainer">
-          <div className="commentBox">
-            {comment.body}
-            {/* {subCommentsRender.length ? <div>view more</div> : null} */}
-            {/* {subCommentsRender} */}
-            <SubComments subComments={comment.subComments} />
-          </div>
-        </div>
-      );
+      return <Comment comment={comment} />;
     });
   };
 
-
-
-  
   return (
     <Fragment>
       {commentBoxRender()}
-      {commentsTotalPages > 1 &&
-        currentPage < commentsTotalPages &&
-        <ViewMoreBtn currentPage={currentPage} commentsTotalPages={commentsTotalPages} setCurrentPage={setCurrentPage}/>}
-      <CommentPostBox setComments={setComments} setCommentsTotalPages={setCommentsTotalPages} commentsTotalPages={commentsTotalPages} comments={comments}/>
+      {commentsTotalPages > 1 && currentPage < commentsTotalPages && (
+        <ViewMoreBtn
+          currentPage={currentPage}
+          commentsTotalPages={commentsTotalPages}
+          setCurrentPage={setCurrentPage}
+        />
+      )}
+      <CommentPostBox
+        setComments={setComments}
+        setCommentsTotalPages={setCommentsTotalPages}
+        commentsTotalPages={commentsTotalPages}
+        comments={comments}
+      />
     </Fragment>
   );
 }

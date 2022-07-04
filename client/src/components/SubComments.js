@@ -1,5 +1,4 @@
-import { Fragment, useState } from "react";
-
+import { Fragment, useEffect, useState } from "react";
 
 export default function SubComments({ subComments = [] }) {
   const [viewSubComments, setViewSubComments] = useState(false);
@@ -11,15 +10,18 @@ export default function SubComments({ subComments = [] }) {
       </div>
     ) : null;
   });
-const subCommentsRender = () => {
 
-    if(allSubComments.length){
-        return viewSubComments ? allSubComments : <button onClick={() => setViewSubComments(true)}>View More</button>
+
+  const subCommentsRender = () => {
+    if (allSubComments.length) {
+      return viewSubComments ? (
+        allSubComments
+      ) : (
+        <button onClick={() => setViewSubComments(true)}>View More</button>
+      );
     }
     return null;
-}
+  };
 
-  return (<Fragment>
-    {subCommentsRender()}
-  </Fragment>)
+  return <Fragment>{subCommentsRender()}</Fragment>;
 }

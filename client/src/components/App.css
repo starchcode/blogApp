@@ -92,41 +92,18 @@ textarea {
   display: flex;
   opacity: 0.9;
 }
-/* 
-.formContainer {
+.cm-btns{
   display: flex;
-justify-content: center;
-  width: 800px;
-  min-height: 900px;
+  justify-content: flex-end;
 }
 
-form{
-  flex-grow: 1;
-}
-.formElement{
-  display: flex;
-  align-items: center;
-  justify-content: left;
+.cm-btns button {
+  font-size: 12px;
+  width: 50px;
+  margin: 0 4px;
 }
 
-.formElement input{
-  padding: 10px;
-  margin: 10px;
-}
-
-.formElement textarea {
-  height: 500px;
-} */
-
-
-
-
-
-
-
-
-
-
+/* new post page */
 body {
   align-items: center;
   /* background-color: #000; */
@@ -203,8 +180,6 @@ body {
   width: 50px;
 }
 
-
-
 .placeholder {
   color: #65657b;
   font-family: sans-serif;
@@ -216,11 +191,6 @@ body {
   transition: transform 200ms, color 200ms;
   top: -20px;
 }
-
-
-
-
-
 
 .submit {
   background-color: #08d;
