@@ -17,4 +17,4 @@ Did not have enough time. Although implemented almost the entire project.
 
 - [ ] Refactor the front-end
 - [ ] Add more edge cases for back-end test
-- [ ] Fix a front-end bug: when new comment added it won't correctly show it.
+- [x] Fix a front-end bug: when new comment added it won't correctly show it.

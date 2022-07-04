@@ -17,10 +17,8 @@ export default function Comment({ comment }) {
   };
 
   if (deleted) return null;
-//   if(!comment) return null;
-//   if(!subComments) return null;
   return (
-    <div key={comment.id + "cm"} className="commentContainer">
+    <div  className="commentContainer">
       <div className="commentBox">
         {!editing ? (
           body

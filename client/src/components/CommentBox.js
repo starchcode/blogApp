@@ -24,18 +24,19 @@ export default function CommentBox() {
 
   useEffect(() => {
     fetchComments(currentPage).catch((e) => {
-      console.log(e);
     });
   }, [currentPage]);
 
+
+useEffect(() => {
+}, [comments])
 
 
   const commentBoxRender = () => {
     if (comments === null) return "Loading...";
     if (commentsTotalPages === 0) return "There is no comments for this post!";
-
     return comments.map((comment) => {
-      return <Comment comment={comment} />;
+      return <Comment key={comment.id + "cm"} comment={comment} />;
     });
   };
 
@@ -51,8 +52,6 @@ export default function CommentBox() {
       )}
       <CommentPostBox
         setComments={setComments}
-        setCommentsTotalPages={setCommentsTotalPages}
-        commentsTotalPages={commentsTotalPages}
         comments={comments}
       />
     </Fragment>

@@ -4,8 +4,6 @@ import { useState } from "react";
 
 export default function CommentPostBox({
   setComments,
-  setCommentsTotalPages,
-  commentsTotalPages,
   comments,
 }) {
   const [body, setBody] = useState("");
@@ -18,10 +16,7 @@ export default function CommentPostBox({
       body: body,
     });
     if (response.status === 201) {
-      console.log(response.data.comment);
-      // setCommentsTotalPages(commentsTotalPages || 1);
       setComments([response.data.comment].concat(comments));
-      console.log(comments)
     }
   };
 
